@@ -233,7 +233,14 @@ nav span {
     overflow: auto;
 }
 
-.mine-messages {
+.msg-time {
+    font-size: .6rem;
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+.sent {
     background-color: var(--mine-message-color);
     min-width: 200px;
     max-width: fit-content;
@@ -242,9 +249,11 @@ nav span {
     border-radius: 10px;
     margin-left: auto;
     margin-bottom: 10px;
+    position: relative;
+    word-wrap: break-word;
 }
 
-.received-messages {
+.received {
     background-color: white;
     min-width: 200px;
     max-width: fit-content;
@@ -252,6 +261,8 @@ nav span {
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
+    position: relative;
+    word-wrap: break-word;
 }
 /* /Messages */
 

@@ -7,16 +7,19 @@
     <title>Boolzapp</title>
     <!-- Link css -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- Link vue -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- Link FA -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Link vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
     <div class="main-bg">
-        <div class="container">
+        <!-- APP -->
+        <div class="container" id="app">
+            <!-- LEFT SIDE (gesione profilo, ricerca e selezione chat)-->
             <div class="chat-list">
                 <header>
+                    <!-- Gesione profilo -->
                     <div class="profile">
                         <div class="ms-image">
                             <img src="img/avatar_1.jpg" alt="">
@@ -25,17 +28,27 @@
                             Luca
                         </div>
                     </div>
+
                     <nav>
+                        <!-- Stato -->
                         <span>
                             <i class="fa-solid fa-circle-notch"></i>
                         </span>
+                        <!-- Stato -->
+
+                        <!-- Nuovo messaggio -->
                         <span>
                             <i class="fa-solid fa-message"></i>
                         </span>
+                        <!-- /Nuovo messaggio -->
+
+                        <!-- Varie -->
                         <span>
                             <i class="fa-solid fa-ellipsis-vertical"></i>
                         </span>
+                        <!-- Varie -->
                     </nav>
+                    <!-- Gesione profilo -->
                 </header>
                 <div class="contacts">
                     <div class="chat-function">
@@ -55,92 +68,88 @@
                             <input type="text" id="chat-search" placeholder="Cerca o inizia una nuova chat">
                         </div>
                     </div>
-                    <div class="card selected">
+                    <div @click="setCurrItem(element)" class="card" v-for="element in contacts">
                         <div class="profile">
                             <div class="ms-image">
-                                <img src="img/avatar_1.jpg" alt="">
+                                <img :src="`img/avatar${element.avatar}.jpg`" alt="">
                             </div>
                             <div class="chat-info">
                                 <div class="profile-name">
-                                    Luca
+                                    {{element.name}}
                                 </div>
                                 <div class="last-message">
-                                    ultimo messaggio inviato
+                                    {{element.messages[element.messages.length -1].message}}
                                 </div>
                             </div>
                         </div>
                         <div class="chat-time">
-                            12:00
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="profile">
-                            <div class="ms-image">
-                                <img src="img/avatar_1.jpg" alt="">
-                            </div>
-                            <div class="chat-info">
-                                <div class="profile-name">
-                                    Luca
-                                </div>
-                                <div class="last-message">
-                                    ultimo messaggio inviato
-                                </div>
-                            </div>
-                        </div>
-                        <div class="chat-time">
-                            12:00
+                            {{ element.messages[element.messages.length - 1].date.substring(11).slice(0, -3) }}
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- /LEFT SIDE -->
+
+            <!-- RIGHT SIDE (chat)-->
             <div class="chat">
                 <header>
-                    <div class="profile">
-                        <div class="ms-image">
-                            <img src="img/avatar_1.jpg" alt="">
-                        </div>
-                        <div class="chat-info">
-                            <div class="profile-name">
-                                Luca
+                    <template v-if="currItem">
+                        <div class="profile">
+                            <div class="ms-image">
+                                <img :src="`img/avatar${currItem.avatar}.jpg`" alt="">
                             </div>
-                            <div class="last-access">
-                                ultimo accesso oggi alle 12:00
+                            <div class="chat-info">
+                                <div class="profile-name">
+                                    {{ currItem.name }}
+                                </div>
+                                <div class="last-access">
+                                    Ultimo accesso alle ore: {{ currItem.messages[currItem.messages.length - 1].date.substring(11).slice(0, -3) }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <nav>
-                        <span>
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </span>
-                        <span>
-                            <i class="fa-solid fa-paperclip"></i>
-                        </span>
-                        <span>
-                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                        </span>
-                    </nav>
+                        <nav>
+                            <span>
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <span>
+                                <i class="fa-solid fa-paperclip"></i>
+                            </span>
+                            <span>
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </span>
+                        </nav>
+                    </template>
                 </header>
                 <div class="messages">
-                    <div class="mine-messages">
-                        Ciao bro
-                    </div>
-                    <div class="received-messages">
-                        Ciao non so cosa scrivere per rappresentare questo messaggio molto lungo
-                    </div>
+                    <template v-if="currItem">
+                        <div v-for="element in currItem.messages">
+                            <div :class="element.status">
+                                {{ element.message }}
+                                <span class="msg-time">
+                                    {{ element.date.substring(11).slice(0, -3) }}
+                                </span> 
+                            </div>
+                        </div>
+                    </template>
                 </div>
+
                 <footer>
-                    <span class="emotes">
-                        <i class="fa-regular fa-face-smile"></i>
-                    </span>
-                    <div class="text-input">
-                        <input type="text" id="chat-input" placeholder="Scrivi un messaggio">
-                    </div>
-                    <span class="record-audio">
-                        <i class="fa-solid fa-microphone"></i>
-                    </span>
+                    <template v-if="currItem">
+                        <span class="emotes">
+                            <i class="fa-regular fa-face-smile"></i>
+                        </span>
+                        <div class="text-input">
+                            <input type="text" placeholder="Scrivi un messaggio" v-model.trim="newMessage" @keyup.enter="sendMessage(currItem)">
+                        </div>
+                        <span class="record-audio">
+                            <i class="fa-solid fa-microphone"></i>
+                        </span>
+                    </template>
                 </footer>
             </div>
+            <!-- /RIGHT SIDE -->
         </div>
+        <!-- /APP -->
     </div>
     <!-- Link JS -->
     <script src="js/script.js"></script>
