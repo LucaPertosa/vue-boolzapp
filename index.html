@@ -65,10 +65,10 @@
                         </div>
                         <div class="search">
                             <label for="chat-search"><i class="fa-solid fa-magnifying-glass"></i></label>
-                            <input type="text" id="chat-search" placeholder="Cerca o inizia una nuova chat">
+                            <input type="text" @keyup.enter="findChat" v-model="searchingChat" id="chat-search" placeholder="Cerca o inizia una nuova chat">
                         </div>
                     </div>
-                    <div @click="setCurrItem(element)" class="card" v-for="element in contacts">
+                    <div @click="setCurrItem(element)" class="card" v-for="element in contacts" v-show="element.visible">
                         <div class="profile">
                             <div class="ms-image">
                                 <img :src="`img/avatar${element.avatar}.jpg`" alt="">

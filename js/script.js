@@ -169,7 +169,8 @@ createApp({
                 }
             ],
             newMessage: '',
-            replyMessage: '', 
+            replyMessage: '',
+            searchingChat: '',
         }
     },
     methods: {
@@ -197,9 +198,17 @@ createApp({
             }
             this.newMessage = '';
         },
-        autoReply() {
-            
-        }
+        // Funzione cerca chat
+        findChat() {
+            for (index in this.contacts) {
+                let currentItem = this.contacts[index];
+                let currentItemName = currentItem.name.toLowerCase();
+                currentItem.visible = currentItemName.indexOf(this.searchingChat.toLowerCase()) > -1;
+                console.log(currentItem.visible);
+
+
+            }
+        },
     }
 }).mount("#app")
    
