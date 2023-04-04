@@ -65,10 +65,10 @@
                         </div>
                         <div class="search">
                             <label for="chat-search"><i class="fa-solid fa-magnifying-glass"></i></label>
-                            <input type="text" @keyup.enter="findChat" v-model="searchingChat" id="chat-search" placeholder="Cerca o inizia una nuova chat">
+                            <input type="text" @keyup="findChat" v-model="searchingChat" id="chat-search" placeholder="Cerca o inizia una nuova chat">
                         </div>
                     </div>
-                    <div @click="setCurrItem(element)" class="card" v-for="element in contacts" v-show="element.visible">
+                    <div @click="setCurrItem(element); toggleHover(element)" class="card" v-for="element in contacts" v-show="element.visible" v-bind:class="{selected: element.hoverClass}">
                         <div class="profile">
                             <div class="ms-image">
                                 <img :src="`img/avatar${element.avatar}.jpg`" alt="">
@@ -120,14 +120,24 @@
                         </nav>
                     </template>
                 </header>
-                <div class="messages">
+                <div class="messages" @click="hideMenu(currItem)">
                     <template v-if="currItem">
-                        <div v-for="element in currItem.messages">
+                        <div v-for="(element, index) in currItem.messages">
                             <div :class="element.status">
-                                {{ element.message }}
+                                <p class="msg-txt">
+                                    {{ element.message }}
+                                </p>
                                 <span class="msg-time">
                                     {{ element.date.substring(11).slice(0, -3) }}
                                 </span> 
+                                <div class="msg-menu" @click="toggleMenu(element)">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                    <ul v-show="element.showMenu" @mouseleave="hideMenu(element)" class="list-menu">
+                                        <li>Info</li>
+                                        <hr>
+                                        <li @click="deleteMsg(currItem, index)">Elimina messaggio</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </template>

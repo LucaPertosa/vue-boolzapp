@@ -13,10 +13,13 @@ a {
     color: inherit;
 }
 
+li {
+    list-style-type: none;
+}
+
 /* VARIABLES */
 :root {
     /* dimension */
-    --main-bg-border-h: 100px;
     --header-footer-h: 60px;
     --chat-list-height: 70px;
     --search-height: 50px;
@@ -35,19 +38,18 @@ a {
 
 /* LAYOUT */
 .main-bg {
-    background-color: var(--main-bg-color);
+    background: linear-gradient(var(--main-bg-top-color) 15%, var(--main-bg-color) 15% 100%);
     height: 100vh;
     min-width: 1250px;
-    border-top: var(--main-bg-border-h) solid var(--main-bg-top-color);
     position: relative;
 }
 
 .container {
     position: absolute;
-    top: calc(50% - (var(--main-bg-border-h) / 2));
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: 100%;
+    height: 90%;
     width: 80%;
     display: flex;
     /* debug */
@@ -195,7 +197,7 @@ nav span {
     cursor: pointer;
 }
 
-.card.selected {
+.selected {
     background-color: var(--selected-chat-list);
 }
 
@@ -238,6 +240,52 @@ nav span {
     position: absolute;
     bottom: 0;
     right: 10px;
+}
+
+.msg-txt {
+    width: 90%;
+}
+
+.msg-menu {
+    position: absolute;
+    right: 30px;
+    top: 10px;
+}   
+
+.msg-menu i {
+    display: none;
+}
+
+.sent:hover .msg-menu i {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.received:hover .msg-menu i {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.list-menu {
+    position: absolute;
+    top: 30px;
+    right: -20px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px;
+    z-index: 222;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.4);
+}
+
+.list-menu li {
+    text-align: center;
+    line-height: 30px;
+    padding: 5px;
+    color: var(--main-bg-top-color);
+    width: 150px;
+    cursor: pointer;
 }
 
 .sent {

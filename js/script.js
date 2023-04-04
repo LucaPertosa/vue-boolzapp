@@ -171,13 +171,28 @@ createApp({
             newMessage: '',
             replyMessage: '',
             searchingChat: '',
+            isActive: false,
+            currMsg: ''
         }
     },
     methods: {
         // Click su selezione chat
         setCurrItem(elem) {
-            this.currItem = elem;
-            this.newMessage = ''
+            // Creo un ciclo for in per dare una key con valore false a ogni elemento per gestire il menu a tendina
+            for (let index in elem.messages) {
+                elem.messages[index].showMenu = false;
+            }
+            this.currItem = elem,
+            this.currMsg = elem.messages
+        },
+        // Gestione hover su elemento cliccato
+        toggleHover(currElem) {
+            this.contacts.forEach(elem => {
+                if (elem !== currElem) {
+                    elem.hoverClass = false;
+                }
+            });
+            currElem.hoverClass = !currElem.hoverClass;
         },
         // Invio nuovo messaggio
         sendMessage(elem) {
@@ -195,8 +210,8 @@ createApp({
                         status: 'received'
                     })
                 }, 1000);
-            }
-            this.newMessage = '';
+            };
+            this.newMessage = ''
         },
         // Funzione cerca chat
         findChat() {
@@ -204,9 +219,26 @@ createApp({
                 let currentItem = this.contacts[index];
                 let currentItemName = currentItem.name.toLowerCase();
                 currentItem.visible = currentItemName.indexOf(this.searchingChat.toLowerCase()) > -1;
-                console.log(currentItem.visible);
-
-
+            };
+        },
+        // Gestione funzione click apertura list-menu
+        toggleMenu(elem) {
+            elem.showMenu = !elem.showMenu
+        },
+        // Gestione mouse leave per il menu a tendina che non si chiude
+        hideMenu(elem) {
+            if (elem.showMenu) {
+                elem.showMenu = false;
+            }
+        },
+        deleteMsg(elem, index) {
+            this.currMsg.splice(index, 1);
+            if (this.currMsg.length < 1) {
+                this.currMsg.push({
+                    date: '',
+                    message: '',
+                    status: ''
+                })
             }
         },
     }
